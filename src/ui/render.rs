@@ -4,21 +4,30 @@ use ratatui::prelude::CrosstermBackend;
 use ratatui::{
     Terminal,
     layout::{Constraint, Direction, Layout},
+    style::{Color, Style},
     widgets::Paragraph,
-    widgets::{Block, Borders, Row, Table},
+    widgets::{Block, Borders, Cell, Row, Table},
 };
+
 use std::io;
 
 pub fn make_rows(tasks: &Vec<Task>) -> Vec<Row<'static>> {
     let mut rows = Vec::new();
     for (i, task) in tasks.iter().enumerate() {
         let status: String;
+        let color: Color;
         if task.status {
             status = String::from("Done");
+            color = Color::Green;
         } else {
             status = String::from("Note done");
+            color = Color::Red;
         }
-        rows.push(Row::new(vec![i.to_string(), task.name.clone(), status]));
+        rows.push(Row::new(vec![
+            Cell::from(i.to_string()),
+            Cell::from(task.name.clone()),
+            Cell::from(status).style(Style::default().fg(color)),
+        ]));
     }
     rows
 }

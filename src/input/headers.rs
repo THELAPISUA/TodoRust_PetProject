@@ -52,8 +52,11 @@ pub fn key(app: &mut App) -> Result<(), Box<dyn std::error::Error>> {
                     }
                     AppState::Remove => {
                         if app.input != "" {
-                            let ind: usize = app.input.parse().unwrap();
-                            app.tasks.remove(ind);
+                            if let Ok(ind) = app.input.parse::<usize>() {
+                                if ind < app.tasks.len() {
+                                    app.tasks.remove(ind);
+                                }
+                            }
                         }
                         app.state = AppState::Notshing;
                     }
